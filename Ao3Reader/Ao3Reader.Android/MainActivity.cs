@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
@@ -8,8 +9,7 @@ using Android.OS;
 
 namespace Ao3Reader.Android
 {
-    [Activity(Label = "Ao3Reader", Theme = "@style/MainTheme", MainLauncher = true,
-        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "Ao3Reader", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)

@@ -1,7 +1,6 @@
 ﻿using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using Ao3Domain;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 

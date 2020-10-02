@@ -10,10 +10,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Xamarin.Forms" Version="3.3.0.912540" />
+        <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
+        <PackageReference Include="Xamarin.Forms" Version="4.8.0.1451" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Ao3Api\Ao3Domain\Ao3Domain.csproj" />
+      <Folder Include="Services" />
     </ItemGroup>
 </Project>
