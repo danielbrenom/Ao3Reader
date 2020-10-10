@@ -1,5 +1,4 @@
-﻿using System;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
@@ -11,7 +10,7 @@ namespace Ao3Reader
         public App()
         {
             InitializeComponent();
-
+            Startup.Init();
             MainPage = new MainPage();
         }
 

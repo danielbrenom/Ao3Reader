@@ -33,12 +33,17 @@ namespace Ao3Reader.ViewModels
             set => SetProperty(ref mTitle, value);
         }
 
+        protected bool HasNavigated { get; set; }
+
         #endregion
 
         protected BaseViewModel()
         {
         }
 
+        public abstract void HasNavigatedHere();
+
+        #region INotifyPropertyChanged
         private void SetProperty<T>(ref T backingStore, T value,
             [CallerMemberName] string propertyName = "",
             Action onChanged = null)
@@ -49,8 +54,6 @@ namespace Ao3Reader.ViewModels
             onChanged?.Invoke();
             OnPropertyChanged(propertyName);
         }
-
-        #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;
 

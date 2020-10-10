@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Ao3Reader.ViewModels;assembly=Ao3Reader"
+             xmlns:models="clr-namespace:Ao3Domain.Models.Data;assembly=Ao3Domain"
+             x:Class="Ao3Reader.Views.Partials.Discover"
+             NavigationPage.HasNavigationBar="false"
+             x:DataType="vm:HomePageVm">
+    <ContentPage.Content>
+        <StackLayout>
+            <CollectionView ItemsSource="{Binding DiscoverWorks}">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Work">
+                        <Grid Padding="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="1"/>
+                            </Grid.RowDefinitions>
+                            <Label>
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{Binding Title}"/>
+                                        <Span Text=" by "/>
+                                        <Span Text="{Binding Author}"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                            <Label Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="2" LineBreakMode="CharacterWrap">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{Binding Summary}"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                            <!-- Separator -->
+                            <BoxView HeightRequest="1"
+                                     BackgroundColor="LightGray"
+                                     Grid.ColumnSpan="2"
+                                     Grid.Row="3"
+                                     Grid.Column="0"
+                                     VerticalOptions="End"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
