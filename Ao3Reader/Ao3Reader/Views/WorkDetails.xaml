@@ -1,0 +1,202 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:vm="clr-namespace:Ao3Reader.ViewModels;assembly=Ao3Reader"
+            xmlns:models="clr-namespace:Ao3Domain.Models.Data;assembly=Ao3Domain"
+            xmlns:localmodels="clr-namespace:Ao3Reader.Models;assembly=Ao3Reader"
+            xmlns:shimmer="clr-namespace:XFShimmerLayout.Controls;assembly=XFShimmerLayout"
+            Title="Work Details"
+            x:Class="Ao3Reader.Views.WorkDetails"
+            x:DataType="vm:DetailsPageVm">
+    <ContentPage Title="Summary">
+        <shimmer:ShimmerLayout Angle="-45" GradientSize=".5" IsLoading="{Binding FinishedLoad}">
+            <StackLayout VerticalOptions="FillAndExpand">
+                <!-- <ActivityIndicator IsRunning="True" IsVisible="{Binding FinishedLoad}" /> -->
+                <StackLayout>
+                    <!-- Work Details -->
+                    <Grid Margin="15, 20,15,50">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <!-- Title -->
+                            <RowDefinition Height="Auto" />
+                            <!-- Author -->
+                            <RowDefinition Height="20" />
+                            <!-- Separator -->
+                            <RowDefinition Height="10" />
+                            <!-- Numbers -->
+                            <RowDefinition Height="Auto" />
+                            <!-- Separator -->
+                            <RowDefinition Height="10" />
+                            <!-- Summary -->
+                            <RowDefinition Height="Auto" />
+                            <!-- Separator -->
+                            <RowDefinition Height="20" />
+                            <!-- Tags -->
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <!-- Title details -->
+                        <Label Text="{Binding Work.Title}"
+                               VerticalOptions="CenterAndExpand"
+                               HorizontalOptions="Start"
+                               Grid.ColumnSpan="2"
+                               Style="{StaticResource TitleLabel}" />
+                        <Label Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding Work.Author}"
+                               Style="{StaticResource LightTitleLabel}" />
+                        <BoxView Style="{StaticResource Separator}"
+                                 Grid.ColumnSpan="2"
+                                 Grid.Row="2"
+                                 Grid.Column="0" />
+                        <!-- Numbers Row 4 -->
+                        <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" HorizontalOptions="CenterAndExpand"
+                              ColumnSpacing="15"
+                              Margin="0, 10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource LightTitleLabel}">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span TextColor="PaleVioletRed" FontFamily="{StaticResource FaSolid}"
+                                              Text="&#xf004;" />
+                                        <Span Text=" " />
+                                        <Span Text="{Binding Work.Kudos}" />
+                                        <Span Text=" " />
+                                        <Span Text="KUDOS" Style="{StaticResource LightTitleLabel}" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                            <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource LightTitleLabel}">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span TextColor="DimGray" FontFamily="{StaticResource FaSolid}"
+                                              Text="&#xf086;" />
+                                        <Span Text=" " />
+                                        <Span Text="{Binding Work.Comments}" />
+                                        <Span Text=" " />
+                                        <Span Text="COMMENTS" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                            <Label Grid.Row="0" Grid.Column="2" Style="{StaticResource LightTitleLabel}">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span TextColor="DimGray" FontFamily="{StaticResource FaSolid}"
+                                              Text="&#xf039;" />
+                                        <Span Text=" " />
+                                        <Span Text="{Binding Work.Words}" />
+                                        <Span Text=" " />
+                                        <Span Text="WORDS" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                            <Label Grid.Row="1" Grid.Column="0" Margin="0,5,0,0" Grid.ColumnSpan="3"
+                                   HorizontalOptions="CenterAndExpand" Style="{StaticResource LightTitleLabel}">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span TextColor="DimGray" FontFamily="{StaticResource FaSolid}"
+                                              Text="&#xf1ab;" />
+                                        <Span Text=" " />
+                                        <Span Text="{Binding Work.Language}" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </Grid>
+                        <BoxView Style="{StaticResource Separator}"
+                                 Grid.ColumnSpan="2"
+                                 Grid.Row="4"
+                                 Grid.Column="0" />
+                        <!-- Summary Row 5 -->
+                        <Grid Margin="0, 20,0,-50" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Label Grid.ColumnSpan="2" Text="About the work" Style="{StaticResource SubTitleLabel}" />
+                            <Label Grid.Row="1" Grid.ColumnSpan="2" LineBreakMode="CharacterWrap"
+                                   Text="{Binding Work.Summary}" />
+                        </Grid>
+                    </Grid>
+                    <!-- Tags -->
+                    <Grid Margin="0,0,0,10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Label Grid.ColumnSpan="2" Text="Tags" Margin="15" Style="{StaticResource SubTitleLabel}" />
+                        <CollectionView Grid.Row="1" Grid.ColumnSpan="2"
+                                        Margin="15,0"
+                                        ItemsSource="{Binding Tags}">
+                            <CollectionView.ItemsLayout>
+                                <GridItemsLayout Orientation="Vertical" Span="3" HorizontalItemSpacing="10"
+                                                 VerticalItemSpacing="5" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="localmodels:Tag">
+                                    <Label Text="{Binding Name}"
+                                           FontSize="10"
+                                           VerticalTextAlignment="Center"
+                                           HorizontalOptions="FillAndExpand"
+                                           VerticalOptions="StartAndExpand" />
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </Grid>
+                </StackLayout>
+
+            </StackLayout>
+        </shimmer:ShimmerLayout>
+    </ContentPage>
+    <ContentPage Title="Chapters">
+        <StackLayout>
+            <StackLayout>
+                <Label Margin="10" VerticalOptions="CenterAndExpand"
+                       HorizontalOptions="Start" Text="Chapters" Style="{StaticResource SubTitleLabel}" />
+                <BoxView Style="{StaticResource Separator}" />
+            </StackLayout>
+            <CollectionView Margin="0,10" ItemsSource="{Binding Chapters}"
+                            SelectionChangedCommand="{Binding SelectChapter}"
+                            SelectedItem="{Binding SelectedChapter}"
+                            SelectionMode="Single">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:ChapterListing">
+                        <Grid Style="{StaticResource ListItem}" Padding="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="5" />
+                            </Grid.RowDefinitions>
+                            <Label Grid.ColumnSpan="2">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{Binding Title}" />
+                                        <Span Text=" posted on " />
+                                        <Span Text="{Binding CreationDate}" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                            <!-- Separator -->
+                            <BoxView Style="{StaticResource Separator}"
+                                     Grid.ColumnSpan="2"
+                                     Grid.Row="1"
+                                     Grid.Column="0" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ContentPage>
+</TabbedPage>

@@ -1,5 +1,7 @@
-﻿using Xamarin.Forms;
+﻿using Ao3Reader.Interfaces;
+using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using XFShimmerLayout.Controls;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 
@@ -10,8 +12,9 @@ namespace Ao3Reader
         public App()
         {
             InitializeComponent();
-            Startup.Init();
-            MainPage = new MainPage();
+            ShimmerLayout.Init(Xamarin.Essentials.DeviceDisplay.MainDisplayInfo.Density);
+            //Startup.Init();
+            Startup.ServiceProvider.GetService<INavigator>().BeginNavigation("HomePage");
         }
 
         protected override void OnStart()

@@ -1,6 +1,8 @@
-﻿using Ao3Reader.Interfaces;
+﻿using Ao3Reader.Architecture;
+using Ao3Reader.Interfaces;
 using Ao3Reader.Services;
 using Ao3Reader.ViewModels;
+using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Ao3Reader.Configuration
@@ -10,7 +12,9 @@ namespace Ao3Reader.Configuration
         public static void Configure(IServiceCollection serviceCollection)
         {
             serviceCollection.AddHttpClient();
+            serviceCollection.AddAutoMapper(typeof(Startup));
             serviceCollection.AddSingleton<IConfigurationManager, ConfigurationManager>();
+            serviceCollection.AddSingleton<INavigator, Navigator>();
             InjectServices(serviceCollection);
             InjectViewModels(serviceCollection);
         }
@@ -34,6 +38,8 @@ namespace Ao3Reader.Configuration
         private static void InjectViewModels(IServiceCollection serviceCollection)
         {
             serviceCollection.AddTransient<HomePageVm>();
+            serviceCollection.AddTransient<DetailsPageVm>();
+            serviceCollection.AddTransient<ReaderPageVm>();
         }
     }
 }

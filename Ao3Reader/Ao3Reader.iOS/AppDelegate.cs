@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Foundation;
+﻿using Foundation;
 using UIKit;
 
 namespace Ao3Reader.iOS
@@ -23,6 +19,8 @@ namespace Ao3Reader.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
+            global::Xamarin.Forms.FormsMaterial.Init();
+            Startup.Init();
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);

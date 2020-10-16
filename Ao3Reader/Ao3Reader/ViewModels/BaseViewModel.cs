@@ -2,49 +2,40 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using Ao3Reader.Interfaces;
 
 namespace Ao3Reader.ViewModels
 {
-    public abstract class BaseViewModel : INotifyPropertyChanged
+    public abstract class BaseViewModel : IBaseViewModel, INotifyPropertyChanged
     {
         #region Properties
 
-        private bool mIsInternetAvailable;
+        public bool InternetAvailable { get; set; }
 
-        public bool InternetAvailable
-        {
-            get => mIsInternetAvailable;
-            set => SetProperty(ref mIsInternetAvailable, value);
-        }
+        public bool IsBusy { get; set; }
 
-        private bool mIsBusy;
-
-        public bool IsBusy
-        {
-            get => mIsBusy;
-            set => SetProperty(ref mIsBusy, value);
-        }
-
-        private string mTitle = string.Empty;
-
-        protected string Title
-        {
-            get => mTitle;
-            set => SetProperty(ref mTitle, value);
-        }
+        protected string Title { get; set; }
 
         protected bool HasNavigated { get; set; }
+        protected INavigator Navigator { get; }
 
         #endregion
+        
+        #region Abstracts
+        
+        public abstract Task HandleNavigation(IReadOnlyDictionary<string, object> parameters = null);
+        
+        #endregion
 
-        protected BaseViewModel()
+        protected BaseViewModel(INavigator navigator)
         {
+            Navigator = navigator;
         }
 
-        public abstract void HasNavigatedHere();
-
         #region INotifyPropertyChanged
-        private void SetProperty<T>(ref T backingStore, T value,
+
+        protected void SetProperty<T>(ref T backingStore, T value,
             [CallerMemberName] string propertyName = "",
             Action onChanged = null)
         {
@@ -52,17 +43,18 @@ namespace Ao3Reader.ViewModels
 
             backingStore = value;
             onChanged?.Invoke();
-            OnPropertyChanged(propertyName);
+            //OnPropertyChanged(propertyName);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            var changed = PropertyChanged;
 
-            changed?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        // protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        // {
+        //     var changed = PropertyChanged;
+        //
+        //     changed?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        // }
 
         #endregion
     }

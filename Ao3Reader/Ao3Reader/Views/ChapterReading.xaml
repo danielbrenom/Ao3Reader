@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Ao3Reader.ViewModels;assembly=Ao3Reader"
+             xmlns:model="clr-namespace:Ao3Reader.Models;assembly=Ao3Reader"
+             xmlns:shimmer="clr-namespace:XFShimmerLayout.Controls;assembly=XFShimmerLayout"
+             x:Class="Ao3Reader.Views.ChapterReading"
+             x:DataType="vm:ReaderPageVm"
+             Title="{Binding Chapter.ChapterTitle}">
+    <ContentPage.Content>
+        <ScrollView>
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <!-- Title -->
+                    <RowDefinition Height="Auto" />
+                    <!-- Summary -->
+                    <RowDefinition Height="Auto" />
+                    <!-- Paragraphs -->
+                    <RowDefinition Height="Auto" />
+                    <!-- Notes -->
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <CollectionView
+                    Grid.Row="0"
+                    ItemsSource="{Binding Paragraphs}"
+                    SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:Paragraph">
+                            <StackLayout HorizontalOptions="FillAndExpand" Padding="0, 0, 0, 5" Spacing="0">
+                                    <Label LineBreakMode="CharacterWrap" HorizontalTextAlignment="Start"
+                                           Text="{Binding Text}" />
+                                </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                    <CollectionView.EmptyView>
+                        <shimmer:ShimmerLayout GradientSize=".5" Angle="-45" IsLoading="{Binding Loaded}">
+                            <StackLayout HorizontalOptions="FillAndExpand" Padding="0, 0, 0, 5" Spacing="10">
+                                <Label LineBreakMode="CharacterWrap" HorizontalTextAlignment="Start"/>
+                                <Label LineBreakMode="CharacterWrap" HorizontalTextAlignment="Start"/>
+                                <Label LineBreakMode="CharacterWrap" HorizontalTextAlignment="Start"/>
+                                <Label LineBreakMode="CharacterWrap" HorizontalTextAlignment="Start"/>
+                                <Label LineBreakMode="CharacterWrap" HorizontalTextAlignment="Start"/>
+                                <Label LineBreakMode="CharacterWrap" HorizontalTextAlignment="Start"/>
+                                <Label LineBreakMode="CharacterWrap" HorizontalTextAlignment="Start"/>
+                                <Label LineBreakMode="CharacterWrap" HorizontalTextAlignment="Start"/>
+                            </StackLayout>
+                        </shimmer:ShimmerLayout>
+                    </CollectionView.EmptyView>
+                </CollectionView>
+            </Grid>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

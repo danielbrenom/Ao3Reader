@@ -1,8 +1,69 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:Ao3Reader.Converters;assembly=Ao3Reader"
              x:Class="Ao3Reader.App">
     <Application.Resources>
-
+        <converters:TextSanitizer x:Key="TextSanitizer" />
+        <converters:BooleanInverter x:Key="BooleanInverter"/>
+        <ResourceDictionary>
+            <OnPlatform x:TypeArguments="x:String" x:Key="FaBrands">
+                <On Platform="Android" 
+                    Value="fa-brands-400.ttf#Fa-Brands-400" />
+            </OnPlatform>
+            <OnPlatform x:TypeArguments="x:String" x:Key="FaSolid">
+                <On Platform="Android" 
+                    Value="fa-solid-900.ttf#Fa-Solid-900" />
+            </OnPlatform>
+            <OnPlatform x:TypeArguments="x:String" x:Key="FaRegular">
+                <On Platform="Android" 
+                    Value="fa-regular-400.ttf#Fa-Regular-400" />
+            </OnPlatform>
+            <OnPlatform x:TypeArguments="x:String" x:Key="SansRegular">
+                <On Platform="Android" 
+                    Value="OpenSans-Regular.ttf#OpenSans-Regular" />
+            </OnPlatform>
+            <OnPlatform x:TypeArguments="x:String" x:Key="SansBold">
+                <On Platform="Android" 
+                    Value="OpenSans-Bold.ttf#OpenSans-Bold" />
+            </OnPlatform>
+            <OnPlatform x:TypeArguments="x:String" x:Key="SansLight">
+                <On Platform="Android" 
+                    Value="OpenSans-Light.ttf#OpenSans-Light" />
+            </OnPlatform>
+            <Style x:Key="ListItem" TargetType="Grid">
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal" />
+                            <VisualState x:Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor"
+                                            Value="LightSkyBlue" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+            <Style x:Key="TitleLabel" TargetType="Label">
+                <Setter Property="FontFamily" Value="{StaticResource SansBold}"/>
+                <Setter Property="FontSize" Value="20"/>
+            </Style>
+            <Style x:Key="SubTitleLabel" TargetType="Label">
+                <Setter Property="FontFamily" Value="{StaticResource SansBold}"/>
+                <Setter Property="FontSize" Value="15"/>
+            </Style>
+            <Style x:Key="LightTitleLabel" TargetType="Label">
+                <Setter Property="FontFamily" Value="{StaticResource SansLight}"/>
+                <Setter Property="FontSize" Value="13"/>
+            </Style>
+            <Style x:Key="Separator" TargetType="BoxView">
+                <Setter Property="HeightRequest" Value="1"/>
+                <Setter Property="BackgroundColor" Value="LightGray"/>
+                <Setter Property="VerticalOptions" Value="End"/>
+                <Setter Property="Opacity" Value="0.4"/>
+            </Style>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

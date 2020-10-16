@@ -8,7 +8,7 @@ namespace Ao3Reader.Interfaces
     {
         public Task<List<Work>> LoadDiscoverWorks();
         public Task<List<Work>> SearchWorks(string search);
-        public Task<Work> GetWork(int workId);
+        public Task<WorkIndexing> GetWork(int workId);
         public Task<WorkChapter> GetWorkChapter(int workId, int chapterId);
     }
 }

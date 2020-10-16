@@ -2,7 +2,8 @@
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Ao3Reader.Views.UserPage">
+             x:Class="Ao3Reader.Views.Partials.UserPage"
+             NavigationPage.HasNavigationBar="false">
     <ContentPage.Content>
         <StackLayout>
             <Label Text="Hello, user!"

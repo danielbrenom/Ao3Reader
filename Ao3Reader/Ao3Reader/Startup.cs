@@ -12,6 +12,7 @@ namespace Ao3Reader
     public static class Startup
     {
         public static IServiceProvider ServiceProvider { get; set; }
+        public static IServiceCollection Container { get; set; }
 
         public static void Init()
         {
@@ -29,6 +30,7 @@ namespace Ao3Reader
 
         private static void ConfigureServices(HostBuilderContext context, IServiceCollection services)
         {
+            Container = services;
             if (context.HostingEnvironment.IsDevelopment())
             {
                 ServiceFactory.ConfigureMock(services);
