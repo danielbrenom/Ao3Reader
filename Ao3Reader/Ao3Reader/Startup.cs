@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using Ao3Reader.Configuration;
+using Ao3Reader.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

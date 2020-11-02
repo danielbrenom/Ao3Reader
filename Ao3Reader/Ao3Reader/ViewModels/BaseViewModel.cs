@@ -19,6 +19,7 @@ namespace Ao3Reader.ViewModels
 
         protected bool HasNavigated { get; set; }
         protected INavigator Navigator { get; }
+        protected IAlert Alerts { get; }
 
         #endregion
         
@@ -28,9 +29,10 @@ namespace Ao3Reader.ViewModels
         
         #endregion
 
-        protected BaseViewModel(INavigator navigator)
+        protected BaseViewModel(INavigator navigator, IAlert alert)
         {
             Navigator = navigator;
+            Alerts = alert;
         }
 
         #region INotifyPropertyChanged

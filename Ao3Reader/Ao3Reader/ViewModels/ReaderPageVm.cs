@@ -9,12 +9,10 @@ namespace Ao3Reader.ViewModels
 {
     public class ReaderPageVm : BaseViewModel
     {
-        private INavigator Navigator;
         private readonly IWorksService Service;
         
-        public ReaderPageVm(INavigator navigator, IWorksService service) : base(navigator)
+        public ReaderPageVm(INavigator navigator, IAlert alert, IWorksService service) : base(navigator, alert)
         {
-            Navigator = navigator;
             Service = service;
         }
         

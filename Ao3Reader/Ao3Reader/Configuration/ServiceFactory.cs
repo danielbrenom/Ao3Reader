@@ -15,6 +15,8 @@ namespace Ao3Reader.Configuration
             serviceCollection.AddAutoMapper(typeof(Startup));
             serviceCollection.AddSingleton<IConfigurationManager, ConfigurationManager>();
             serviceCollection.AddSingleton<INavigator, Navigator>();
+            serviceCollection.AddSingleton<IAlert, Alerts>();
+            serviceCollection.AddSingleton<ILocalStorage, LocalStorage>();
             InjectServices(serviceCollection);
             InjectViewModels(serviceCollection);
         }
@@ -23,6 +25,9 @@ namespace Ao3Reader.Configuration
         {
             serviceCollection.AddHttpClient();
             serviceCollection.AddSingleton<IConfigurationManager, ConfigurationManager>();
+            serviceCollection.AddSingleton<INavigator, Navigator>();
+            serviceCollection.AddSingleton<IAlert, Alerts>();
+            serviceCollection.AddSingleton<ILocalStorage, LocalStorage>();
             InjectMockServices(serviceCollection);
             InjectViewModels(serviceCollection);
         }
@@ -30,6 +35,7 @@ namespace Ao3Reader.Configuration
         {
             serviceCollection.AddSingleton<IHttpService, HttpService>();
             serviceCollection.AddTransient<IWorksService, WorksService>();
+            serviceCollection.AddTransient<IFavoriteService, FavoriteService>();
         }
 
         private static void InjectMockServices(IServiceCollection serviceCollection){}

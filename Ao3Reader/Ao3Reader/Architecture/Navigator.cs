@@ -11,6 +11,7 @@ namespace Ao3Reader.Architecture
     public class Navigator : INavigator
     {
         private static NavigationPage CurrentPage => Application.Current.MainPage as NavigationPage;
+        private IAlert Alerts;
 
         public void NavigateTo(bool hasNavigationBar = true)
         {
@@ -28,7 +29,7 @@ namespace Ao3Reader.Architecture
                 }
                 catch (Exception)
                 {
-                    await CurrentPage.DisplayAlert("Error", "Not able to navigate to destination page", "OK");
+                    await Alerts.CallAlertAsync("Error", "Not able to navigate to destination page", new AlertAction("OK"));
                 }
             });
         }
@@ -44,7 +45,7 @@ namespace Ao3Reader.Architecture
             catch (Exception ex)
             {
                 await CurrentPage.Navigation.PopAsync();
-                await CurrentPage.DisplayAlert("Error", "Not able to navigate to destination page", "OK");
+                await Alerts.CallAlertAsync("Error", "Not able to navigate to destination page", new AlertAction("OK"));
             }
         }
 
@@ -57,11 +58,6 @@ namespace Ao3Reader.Architecture
                 nameof(ChapterReading) => new ChapterReading(),
                 _ => null
             };
-        } 
-
-        public async Task ShowAlert(Exception ex)
-        {
-            await CurrentPage.DisplayAlert("Error", "An error occured", "OK");
         }
     }
 }

@@ -5,6 +5,7 @@
             x:Class="Ao3Reader.Views.HomePage"
             xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
             android:TabbedPage.ToolbarPlacement="Bottom"
+            NavigationPage.HasNavigationBar="False"
             Title="AO3Reader">
     <TabbedPage.Children>
         <NavigationPage Title="Discover">
@@ -23,13 +24,13 @@
                 <partials:Favorites />
             </x:Arguments>
         </NavigationPage>
-        <NavigationPage Title="Account">
-            <NavigationPage.IconImageSource>
-                <FontImageSource FontFamily="{StaticResource FaRegular}" Glyph="&#xf007;"/>
-            </NavigationPage.IconImageSource>
-            <x:Arguments>
-                <partials:UserPage />
-            </x:Arguments>
-        </NavigationPage>
+        <!-- <NavigationPage Title="Account"> -->
+        <!--     <NavigationPage.IconImageSource> -->
+        <!--         <FontImageSource FontFamily="{StaticResource FaRegular}" Glyph="&#xf007;"/> -->
+        <!--     </NavigationPage.IconImageSource> -->
+        <!--     <x:Arguments> -->
+        <!--         <partials:UserPage /> -->
+        <!--     </x:Arguments> -->
+        <!-- </NavigationPage> -->
     </TabbedPage.Children>
 </TabbedPage>

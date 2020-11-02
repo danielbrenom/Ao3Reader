@@ -2,13 +2,227 @@
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:Ao3Reader.ViewModels;assembly=Ao3Reader"
+             xmlns:controls="clr-namespace:XFShimmerLayout.Controls;assembly=XFShimmerLayout"
+             xmlns:data="clr-namespace:Ao3Domain.Models.Data;assembly=Ao3Domain"
              x:Class="Ao3Reader.Views.Partials.Favorites"
-             NavigationPage.HasNavigationBar="false">
+             NavigationPage.HasNavigationBar="false"
+             x:DataType="viewModels:HomePageVm"
+             Visual="Material">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Favorites"
-                   VerticalOptions="CenterAndExpand"
-                   HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <ScrollView>
+            <StackLayout>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Label Margin="10" HorizontalOptions="Center" Text="Favorites" Style="{StaticResource SubTitleLabel}" />
+                        <StackLayout Grid.Row="1">
+                            <Grid ColumnSpacing="0" Padding="20,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="50" />
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Text="{Binding FavoriteWorks.Count, StringFormat='{0} works'}" HorizontalOptions="Start" />
+                                <Label Grid.Column="1" Text="Sort by" HorizontalOptions="End" />
+                            </Grid>
+                        </StackLayout>
+                    </Grid>
+                    <RefreshView Grid.Row="1" IsRefreshing="{Binding FavoritesRefreshing}"
+                                 Command="{Binding RefreshFavorites}">
+                        <CollectionView
+                            ItemsSource="{Binding FavoriteWorks}"
+                            SelectionMode="Single"
+                            SelectionChangedCommand="{Binding HistorySelected}"
+                            SelectedItem="{Binding SelectedHistory}">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Vertical" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="data:Work">
+                                    <Grid Style="{StaticResource ListItem}" Padding="10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="80" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="20" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="20" />
+                                            <RowDefinition Height="20" />
+                                            <RowDefinition Height="1" />
+                                        </Grid.RowDefinitions>
+                                        <Grid Grid.Row="0" Grid.Column="0" Grid.RowSpan="5">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="40" />
+                                                <RowDefinition Height="40" />
+                                            </Grid.RowDefinitions>
+                                            <Frame Grid.Row="0" Grid.Column="0" Padding="0">
+                                                <Label VerticalOptions="CenterAndExpand"
+                                                       HorizontalOptions="CenterAndExpand">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span TextColor="Black"
+                                                                  FontFamily="{StaticResource FaSolid}"
+                                                                  Text="{Binding RequiredTags[0], Converter={StaticResource TagToIcon}}" />
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                            </Frame>
+                                            <Frame Grid.Row="0" Grid.Column="1" Padding="0">
+                                                <Label VerticalOptions="CenterAndExpand"
+                                                       HorizontalOptions="CenterAndExpand">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span TextColor="Black"
+                                                                  FontFamily="{StaticResource FaSolid}"
+                                                                  Text="{Binding RequiredTags[1], Converter={StaticResource TagToIcon}}" />
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                            </Frame>
+                                            <Frame Grid.Row="1" Grid.Column="0" Padding="0">
+                                                <Label VerticalOptions="CenterAndExpand"
+                                                       HorizontalOptions="CenterAndExpand">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span TextColor="Black"
+                                                                  FontFamily="{StaticResource FaSolid}"
+                                                                  Text="{Binding RequiredTags[2], Converter={StaticResource TagToIcon}}" />
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                            </Frame>
+                                            <Frame Grid.Row="1" Grid.Column="1" Padding="0">
+                                                <Label VerticalOptions="CenterAndExpand"
+                                                       HorizontalOptions="CenterAndExpand">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span TextColor="Black"
+                                                                  FontFamily="{StaticResource FaSolid}"
+                                                                  Text="{Binding RequiredTags[3], Converter={StaticResource TagToIcon}}" />
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                            </Frame>
+                                        </Grid>
+                                        <Label Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2"
+                                               Style="{StaticResource SubTitleLabel}">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="{Binding Title}" />
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                        <Label Grid.Column="1" Grid.Row="1" Style="{StaticResource LightTitleLabel}"
+                                               Text="{Binding Author}" />
+                                        <Label Grid.Column="1" Grid.Row="2"
+                                               LineBreakMode="CharacterWrap">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span TextColor="PaleVioletRed"
+                                                          FontFamily="{StaticResource FaSolid}"
+                                                          Text="&#xf004;" />
+                                                    <Span Text=" " />
+                                                    <Span Text="{Binding Kudos}" />
+                                                    <Span Text=" " />
+                                                    <Span Text="KUDOS" Style="{StaticResource LightTitleLabel}" />
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                        <Label Grid.Column="2" Grid.Row="2"
+                                               LineBreakMode="CharacterWrap">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span TextColor="DimGray" FontFamily="{StaticResource FaSolid}"
+                                                          Text="&#xf1ab;" />
+                                                    <Span Text=" " />
+                                                    <Span Text="{Binding Language}" />
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                        <Label Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2"
+                                               LineBreakMode="NoWrap">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span TextColor="DimGray" FontFamily="{StaticResource FaSolid}"
+                                                          Text="&#xf5ac;" />
+                                                    <Span Text=" " />
+                                                    <Span Text="{Binding Fandom[0]}" />
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                        <!-- Separator -->
+                                        <BoxView HeightRequest="1"
+                                                 BackgroundColor="LightGray"
+                                                 Grid.ColumnSpan="3"
+                                                 Grid.Row="4"
+                                                 Grid.Column="0"
+                                                 VerticalOptions="End" />
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                            <CollectionView.EmptyView>
+                                <StackLayout>
+                                    <controls:ShimmerLayout GradientSize=".5" IsLoading="True"
+                                                            IsVisible="{Binding LoadingFavorites}" Angle="-45">
+                                        <Grid Style="{StaticResource ListItem}" Padding="10">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="20" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="20" />
+                                                <RowDefinition Height="20" />
+                                                <RowDefinition Height="1" />
+                                            </Grid.RowDefinitions>
+                                            <Label Grid.ColumnSpan="3" Style="{StaticResource SubTitleLabel}" />
+                                            <Label Grid.Column="0" Grid.Row="1"
+                                                   Style="{StaticResource LightTitleLabel}" />
+                                            <Label Grid.Column="0" Grid.Row="2"
+                                                   LineBreakMode="CharacterWrap" />
+                                            <Label Grid.Column="1" Grid.Row="2"
+                                                   LineBreakMode="CharacterWrap" />
+                                            <Label Grid.Column="2" Grid.Row="2"
+                                                   LineBreakMode="NoWrap" />
+                                            <!-- Separator -->
+                                            <BoxView HeightRequest="1"
+                                                     BackgroundColor="LightGray"
+                                                     Grid.ColumnSpan="3"
+                                                     Grid.Row="3"
+                                                     Grid.Column="0"
+                                                     VerticalOptions="End" />
+                                        </Grid>
+                                    </controls:ShimmerLayout>
+                                    <StackLayout
+                                        IsVisible="{Binding HasFavorites, Converter={StaticResource BooleanInverter}}"
+                                        VerticalOptions="Start" HorizontalOptions="CenterAndExpand">
+                                        <Label HorizontalTextAlignment="Center" Padding="20"
+                                               Text="You have no favorites at the moment. Try looking for histories to favorite!" />
+                                    </StackLayout>
+                                </StackLayout>
+                            </CollectionView.EmptyView>
+                        </CollectionView>
+                    </RefreshView>
+                </Grid>
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

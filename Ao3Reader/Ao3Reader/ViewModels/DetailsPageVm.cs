@@ -11,16 +11,22 @@ using Xamarin.Forms;
 
 namespace Ao3Reader.ViewModels
 {
-    public class DetailsPageVm: BaseViewModel
+    public class DetailsPageVm : BaseViewModel
     {
         private readonly IWorksService _worksService;
+        private readonly IFavoriteService _favoriteService;
         public ICommand SelectChapter { get; }
+        public ICommand FavoriteCommand { get; }
 
-        public DetailsPageVm(INavigator navigator, IWorksService worksService) : base(navigator)
+        public DetailsPageVm(INavigator navigator, IAlert alert, IWorksService worksService,
+            IFavoriteService favoriteService) : base(navigator, alert)
         {
             _worksService = worksService;
-            SelectChapter = new Command(async ()=> await LoadChapter());
+            _favoriteService = favoriteService;
+            SelectChapter = new Command(async () => await LoadChapter());
+            FavoriteCommand = new Command<Work>(async (work) => await FavoriteWork(work));
         }
+
         public ChapterListing SelectedChapter { get; set; }
         public WorkIndexing Work { get; set; }
         public ObservableCollection<ChapterListing> Chapters { get; set; } = new ObservableCollection<ChapterListing>();
@@ -33,9 +39,9 @@ namespace Ao3Reader.ViewModels
                 return;
             if (parameters.TryGetValue("work", out var work) && work is Work)
             {
-                var result = await _worksService.GetWork(((Work)work).WorkId);
+                var result = await _worksService.GetWork(((Work) work).WorkId);
                 Work = work.getAs<WorkIndexing>();
-                Work.Tags.ForEach(tag => Tags.Add(new Tag{Name = tag}));
+                Work.Tags.ForEach(tag => Tags.Add(new Tag {Name = tag}));
                 result.Chapters.ForEach(Chapters.Add);
                 FinishedLoad = false;
             }
@@ -47,17 +53,31 @@ namespace Ao3Reader.ViewModels
                 return;
             try
             {
-                var chapter = SelectedChapter as ChapterListing;
-                await Navigator.NavigateToAsync("ChapterReading", new Dictionary<string, object> {{"chapter", chapter},{"work", Work}});
+                var chapter = SelectedChapter;
+                await Navigator.NavigateToAsync("ChapterReading",
+                    new Dictionary<string, object> {{"chapter", chapter}, {"work", Work}});
             }
             catch (Exception ex)
             {
-                await Navigator.ShowAlert(ex);
+                await Alerts.CallAlertAsync(ex);
             }
             finally
             {
                 SelectedChapter = null;
-                //OnPropertyChanged(nameof(SelectedChapter));
+            }
+        }
+
+        private async Task FavoriteWork(Work work)
+        {
+            if (!await _favoriteService.CheckFavorites(work))
+            {
+                await _favoriteService.AddToFavorites(work);
+                await Alerts.CallToastAsync("Added to favorites", null, Color.PaleGreen, Color.White);
+            }
+            else
+            {
+                await _favoriteService.RemoveFromFavorites(work);
+                await Alerts.CallToastAsync("Removed from favorites", null, Color.Salmon, Color.White);
             }
         }
     }

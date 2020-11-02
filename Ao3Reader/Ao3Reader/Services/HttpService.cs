@@ -19,7 +19,7 @@ namespace Ao3Reader.Services
         public HttpService(IHttpClientFactory httpClientFactory, IConfigurationManager configurationManager)
         {
             _client = httpClientFactory.CreateClient();
-            _client.Timeout = TimeSpan.FromSeconds(100);
+            _client.Timeout = TimeSpan.FromSeconds(50);
             BaseUrl = configurationManager.GetConfigKey("BaseUrl");
             Headers = new Dictionary<string, string>();
             Query = new Dictionary<string, string>();
@@ -42,38 +42,33 @@ namespace Ao3Reader.Services
             try
             {
                 var request = MakeRequest();
-                var response = await _client.SendAsync(request, new CancellationToken(false));
+                var cancelationToken = new CancellationTokenSource();
+                var response = await _client.SendAsync(request, cancelationToken.Token);
                 ClearParameters();
                 responseBody = await response.Content.ReadAsStringAsync();
-                responseCode = response.StatusCode;
-                if (response.IsSuccessStatusCode || response.StatusCode.Equals(HttpStatusCode.OK))
-                {
-                    var resp = default(T);
-                    if (typeof(T) != typeof(string) && response.Content.Headers.ContentType != null &&
-                        response.Content.Headers.ContentType.MediaType.Contains("application/json"))
-                        resp = (T) JsonConvert.DeserializeObject(responseBody, typeof(T),
-                            new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore});
-                    if (responseBody.StartsWith("\"") && response.Content.Headers.ContentType != null &&
-                        response.Content.Headers.ContentType.MediaType.Contains("application/json"))
-                        resp = (T) JsonConvert.DeserializeObject(responseBody, typeof(T),
-                            new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore});
-                    if (resp is null && typeof(T) == typeof(string))
-                        resp = responseBody.getAs<T>();
-                    return resp;
-                }
-
-                var exception = response.StatusCode switch
-                {
-                    (HttpStatusCode) 555 => new HttpRequestException(responseBody, null),
-                    HttpStatusCode.BadRequest => new HttpRequestException(responseBody, null),
-                    _ => new HttpRequestException(responseBody, null)
-                };
-                throw exception;
+                if (!response.IsSuccessStatusCode && !response.StatusCode.Equals(HttpStatusCode.OK))
+                    throw new HttpRequestException(responseBody, null);
+                var resp = default(T);
+                if (typeof(T) != typeof(string) && response.Content.Headers.ContentType != null &&
+                    response.Content.Headers.ContentType.MediaType.Contains("application/json"))
+                    resp = (T) JsonConvert.DeserializeObject(responseBody, typeof(T),
+                        new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore});
+                if (responseBody.StartsWith("\"") && response.Content.Headers.ContentType != null &&
+                    response.Content.Headers.ContentType.MediaType.Contains("application/json"))
+                    resp = (T) JsonConvert.DeserializeObject(responseBody, typeof(T),
+                        new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore});
+                if (resp is null && typeof(T) == typeof(string))
+                    resp = responseBody.getAs<T>();
+                return resp;
             }
-            catch (Exception e) when (e is HttpRequestException)
+            catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
+            // catch (TaskCanceledException e)
+            // {
+            //     throw new Exception(e.Message);
+            // }
         }
 
         public IHttpService AddHeader(string name, object value)

@@ -6,6 +6,7 @@
     <Application.Resources>
         <converters:TextSanitizer x:Key="TextSanitizer" />
         <converters:BooleanInverter x:Key="BooleanInverter"/>
+        <converters:TagToIcon x:Key="TagToIcon"/>
         <ResourceDictionary>
             <OnPlatform x:TypeArguments="x:String" x:Key="FaBrands">
                 <On Platform="Android" 
@@ -63,6 +64,22 @@
                 <Setter Property="BackgroundColor" Value="LightGray"/>
                 <Setter Property="VerticalOptions" Value="End"/>
                 <Setter Property="Opacity" Value="0.4"/>
+            </Style>
+            <Style x:Key="IconButton" TargetType="Button">
+                <Setter Property="FontFamily" Value="{StaticResource FaRegular}"/>
+                <Setter Property="FontSize" Value="16"></Setter>
+                <Setter Property="HorizontalOptions" Value="End"/>
+                <Setter Property="WidthRequest" Value="50"/>
+                <Setter Property="HeightRequest" Value="50"/>
+                <Setter Property="CornerRadius" Value="25"/>
+            </Style>
+            <Style x:Key="LikeButton" BasedOn="{StaticResource IconButton}" TargetType="Button">
+                <Setter Property="TextColor" Value="White"></Setter>
+                <Setter Property="BackgroundColor" Value="Salmon"/>
+            </Style>
+            <Style x:Key="IconText" TargetType="Label">
+                <Setter Property="FontFamily" Value="{StaticResource FaRegular}"/>
+                <Setter Property="TextColor" Value="Black"/>
             </Style>
         </ResourceDictionary>
     </Application.Resources>
