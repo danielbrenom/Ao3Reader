@@ -31,7 +31,8 @@ namespace Ao3Reader.Services
         {
             return Task.Run(() =>
             {
-                _localStorage.GetStorage().FavoriteWorks.Remove(work);
+                var index = _localStorage.GetStorage().FavoriteWorks.FindIndex(favorites => favorites.WorkId == work.WorkId);
+                _localStorage.GetStorage().FavoriteWorks.RemoveAt(index);
                 _localStorage.SaveFile();
             });
         }

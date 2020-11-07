@@ -10,5 +10,6 @@ namespace Ao3Reader.Interfaces
         public void BeginNavigation(string pageName, IReadOnlyDictionary<string, object> parameters = null,
             bool hasNavBar = true);
         public Task NavigateToAsync(string pageName, IReadOnlyDictionary<string, object> parameters);
+        public Task ReturnAsync();
     }
 }

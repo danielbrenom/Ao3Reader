@@ -24,7 +24,7 @@ namespace Ao3Reader.ViewModels
             _worksService = worksService;
             _favoriteService = favoriteService;
             SelectChapter = new Command(async () => await LoadChapter());
-            FavoriteCommand = new Command<Work>(async (work) => await FavoriteWork(work));
+            FavoriteCommand = new Command<WorkIndexing>(async (work) => await FavoriteWork(work.getAs<Work>()));
         }
 
         public ChapterListing SelectedChapter { get; set; }
@@ -32,6 +32,7 @@ namespace Ao3Reader.ViewModels
         public ObservableCollection<ChapterListing> Chapters { get; set; } = new ObservableCollection<ChapterListing>();
         public ObservableCollection<Tag> Tags { get; set; } = new ObservableCollection<Tag>();
         public bool FinishedLoad { get; set; } = true;
+        public bool WorkFavorited { get; set; }
 
         public override async Task HandleNavigation(IReadOnlyDictionary<string, object> parameters = null)
         {
@@ -43,6 +44,7 @@ namespace Ao3Reader.ViewModels
                 Work = work.getAs<WorkIndexing>();
                 Work.Tags.ForEach(tag => Tags.Add(new Tag {Name = tag}));
                 result.Chapters.ForEach(Chapters.Add);
+                WorkFavorited = await _favoriteService.CheckFavorites(work.getAs<Work>());
                 FinishedLoad = false;
             }
         }
@@ -72,11 +74,13 @@ namespace Ao3Reader.ViewModels
             if (!await _favoriteService.CheckFavorites(work))
             {
                 await _favoriteService.AddToFavorites(work);
+                WorkFavorited = true;
                 await Alerts.CallToastAsync("Added to favorites", null, Color.PaleGreen, Color.White);
             }
             else
             {
                 await _favoriteService.RemoveFromFavorites(work);
+                WorkFavorited = false;
                 await Alerts.CallToastAsync("Removed from favorites", null, Color.Salmon, Color.White);
             }
         }

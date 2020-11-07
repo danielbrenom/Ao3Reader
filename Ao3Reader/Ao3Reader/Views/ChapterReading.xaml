@@ -7,47 +7,82 @@
              xmlns:shimmer="clr-namespace:XFShimmerLayout.Controls;assembly=XFShimmerLayout"
              x:Class="Ao3Reader.Views.ChapterReading"
              x:DataType="vm:ReaderPageVm"
-             Title="{Binding Chapter.ChapterTitle}">
+             x:Name="Reader"
+             NavigationPage.HasNavigationBar="False"
+             Title="{Binding Chapter.ChapterTitle}"
+             BackgroundColor="{AppThemeBinding Dark=Black, Light=White}">
     <ContentPage.Content>
         <ScrollView>
-            <Grid Margin="10">
+            <Grid>
                 <Grid.RowDefinitions>
-                    <!-- Title -->
                     <RowDefinition Height="Auto" />
-                    <!-- Summary -->
-                    <RowDefinition Height="Auto" />
-                    <!-- Paragraphs -->
-                    <RowDefinition Height="Auto" />
-                    <!-- Notes -->
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <CollectionView
-                    Grid.Row="0"
-                    ItemsSource="{Binding Paragraphs}"
-                    SelectionMode="None">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="model:Paragraph">
-                            <StackLayout HorizontalOptions="FillAndExpand" Padding="0, 0, 0, 5" Spacing="0">
+                <Grid VerticalOptions="CenterAndExpand" Margin="0, 5, 0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.2*" />
+                        <ColumnDefinition Width="0.8*" />
+                        <ColumnDefinition Width="0.2*" />
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" FontSize="20" VerticalOptions="CenterAndExpand" HorizontalOptions="Center"
+                           Text="&#xf060;" FontFamily="{StaticResource FaSolid}" Padding="10"
+                           TextColor="{AppThemeBinding Light=Black, Dark=White}">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ReturnCommand}" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Label Grid.Column="1" Text="{Binding Chapter.ChapterTitle}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"
+                           TextColor="{AppThemeBinding Light=Black, Dark=White}">
+                    </Label>
+                    <Label Grid.Column="2" VerticalOptions="CenterAndExpand" FontSize="20" Margin="10" Text="&#xf042;"
+                           FontFamily="{StaticResource FaSolid}" Padding="0, 0" HorizontalOptions="Center"
+                           TextColor="{AppThemeBinding Light=Black, Dark=White}">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NightCommand}" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Grid>
+                <Grid Grid.Row="1" Margin="10">
+                    <Grid.RowDefinitions>
+                        <!-- Title -->
+                        <RowDefinition Height="Auto" />
+                        <!-- Summary -->
+                        <RowDefinition Height="Auto" />
+                        <!-- Paragraphs -->
+                        <RowDefinition Height="Auto" />
+                        <!-- Notes -->
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <CollectionView
+                        Grid.Row="0"
+                        ItemsSource="{Binding Paragraphs}"
+                        SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="model:Paragraph">
+                                <StackLayout HorizontalOptions="FillAndExpand" Padding="0, 0, 0, 10" Spacing="0">
                                     <Label LineBreakMode="CharacterWrap" HorizontalTextAlignment="Start"
-                                           Text="{Binding Text}" />
+                                           Text="{Binding Text}"
+                                           TextColor="{AppThemeBinding Light=Black, Dark=White}">
+                                    </Label>
                                 </StackLayout>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                    <CollectionView.EmptyView>
-                        <shimmer:ShimmerLayout GradientSize=".5" Angle="-45" IsLoading="{Binding Loaded}">
-                            <StackLayout HorizontalOptions="FillAndExpand" Padding="0, 0, 0, 5" Spacing="10">
-                                <Label LineBreakMode="CharacterWrap" HorizontalTextAlignment="Start"/>
-                                <Label LineBreakMode="CharacterWrap" HorizontalTextAlignment="Start"/>
-                                <Label LineBreakMode="CharacterWrap" HorizontalTextAlignment="Start"/>
-                                <Label LineBreakMode="CharacterWrap" HorizontalTextAlignment="Start"/>
-                                <Label LineBreakMode="CharacterWrap" HorizontalTextAlignment="Start"/>
-                                <Label LineBreakMode="CharacterWrap" HorizontalTextAlignment="Start"/>
-                                <Label LineBreakMode="CharacterWrap" HorizontalTextAlignment="Start"/>
-                                <Label LineBreakMode="CharacterWrap" HorizontalTextAlignment="Start"/>
-                            </StackLayout>
-                        </shimmer:ShimmerLayout>
-                    </CollectionView.EmptyView>
-                </CollectionView>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                        <CollectionView.EmptyView>
+                            <shimmer:ShimmerLayout GradientSize=".5" Angle="-45" IsLoading="{Binding Loaded}">
+                                <StackLayout HorizontalOptions="FillAndExpand" Padding="0, 0, 0, 5" Spacing="10">
+                                    <Label LineBreakMode="CharacterWrap" HorizontalTextAlignment="Start" />
+                                    <Label LineBreakMode="CharacterWrap" HorizontalTextAlignment="Start" />
+                                    <Label LineBreakMode="CharacterWrap" HorizontalTextAlignment="Start" />
+                                    <Label LineBreakMode="CharacterWrap" HorizontalTextAlignment="Start" />
+                                    <Label LineBreakMode="CharacterWrap" HorizontalTextAlignment="Start" />
+                                    <Label LineBreakMode="CharacterWrap" HorizontalTextAlignment="Start" />
+                                    <Label LineBreakMode="CharacterWrap" HorizontalTextAlignment="Start" />
+                                    <Label LineBreakMode="CharacterWrap" HorizontalTextAlignment="Start" />
+                                </StackLayout>
+                            </shimmer:ShimmerLayout>
+                        </CollectionView.EmptyView>
+                    </CollectionView>
+                </Grid>
             </Grid>
         </ScrollView>
     </ContentPage.Content>

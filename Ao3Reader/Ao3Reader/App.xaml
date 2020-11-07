@@ -73,12 +73,28 @@
                 <Setter Property="HeightRequest" Value="50"/>
                 <Setter Property="CornerRadius" Value="25"/>
             </Style>
+            <Style x:Key="IconButtonSolid" TargetType="Button">
+                <Setter Property="FontFamily" Value="{StaticResource FaSolid}"/>
+                <Setter Property="FontSize" Value="16"></Setter>
+                <Setter Property="HorizontalOptions" Value="End"/>
+                <Setter Property="WidthRequest" Value="50"/>
+                <Setter Property="HeightRequest" Value="50"/>
+                <Setter Property="CornerRadius" Value="25"/>
+            </Style>
             <Style x:Key="LikeButton" BasedOn="{StaticResource IconButton}" TargetType="Button">
+                <Setter Property="TextColor" Value="White"></Setter>
+                <Setter Property="BackgroundColor" Value="Salmon"/>
+            </Style>
+            <Style x:Key="LikedButton" BasedOn="{StaticResource IconButtonSolid}" TargetType="Button">
                 <Setter Property="TextColor" Value="White"></Setter>
                 <Setter Property="BackgroundColor" Value="Salmon"/>
             </Style>
             <Style x:Key="IconText" TargetType="Label">
                 <Setter Property="FontFamily" Value="{StaticResource FaRegular}"/>
+                <Setter Property="TextColor" Value="Black"/>
+            </Style>
+            <Style x:Key="IconTextSolid" TargetType="Label">
+                <Setter Property="FontFamily" Value="{StaticResource FaSolid}"/>
                 <Setter Property="TextColor" Value="Black"/>
             </Style>
         </ResourceDictionary>

@@ -20,32 +20,30 @@ namespace Ao3Reader.Services
         {
             _client = httpClientFactory.CreateClient();
             _client.Timeout = TimeSpan.FromSeconds(50);
-            BaseUrl = configurationManager.GetConfigKey("BaseUrl");
+            _baseUrl = configurationManager.GetConfigKey("BaseUrl");
             Headers = new Dictionary<string, string>();
             Query = new Dictionary<string, string>();
             FormBody = new Dictionary<string, string>();
         }
 
-        protected string BaseUrl;
-        protected string Path { get; set; }
-        protected HttpMethod Method { get; set; }
-        protected Dictionary<string, string> Headers { get; }
-        protected Dictionary<string, string> Query { get; }
-        public Dictionary<string, string> FormBody { get; }
+        private readonly string _baseUrl;
+        private string Path { get; set; }
+        private HttpMethod Method { get; set; }
+        private Dictionary<string, string> Headers { get; }
+        private Dictionary<string, string> Query { get; }
+        private Dictionary<string, string> FormBody { get; }
 
-        public object Body { get; set; }
+        private object Body { get; set; }
 
         public async Task<T> ExecuteAsync<T>()
         {
-            var responseCode = HttpStatusCode.InternalServerError;
-            var responseBody = string.Empty;
             try
             {
                 var request = MakeRequest();
                 var cancelationToken = new CancellationTokenSource();
                 var response = await _client.SendAsync(request, cancelationToken.Token);
                 ClearParameters();
-                responseBody = await response.Content.ReadAsStringAsync();
+                var responseBody = await response.Content.ReadAsStringAsync();
                 if (!response.IsSuccessStatusCode && !response.StatusCode.Equals(HttpStatusCode.OK))
                     throw new HttpRequestException(responseBody, null);
                 var resp = default(T);
@@ -108,11 +106,11 @@ namespace Ao3Reader.Services
             return this;
         }
 
-        public IHttpService AddParameter(string Type, string name, object value)
+        public IHttpService AddParameter(string type, string name, object value)
         {
             var adaptedValue =
                 value is decimal ? value.ToString().Replace(".", "").Replace(",", ".") : value.ToString();
-            switch (Type)
+            switch (type)
             {
                 case "Body":
                     Body = value;
@@ -127,7 +125,7 @@ namespace Ao3Reader.Services
                     Query.Add(name, adaptedValue);
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(Type), Type);
+                    throw new ArgumentOutOfRangeException(nameof(type), type);
             }
             return this;
         }
@@ -144,7 +142,7 @@ namespace Ao3Reader.Services
                     : (HttpContent) new StringContent(Body.ToString(), Encoding.UTF8, "application/json");
             Headers.ForEach(header => request.Headers.Add(header.Key, header.Value));
             var queryString = GenerateQueryString(Query);
-            var uri = Uri.EscapeUriString($"{BaseUrl}{Path}?{queryString}");
+            var uri = Uri.EscapeUriString($"{_baseUrl}{Path}?{queryString}");
             request.RequestUri = new Uri(uri);
             return request;
         }

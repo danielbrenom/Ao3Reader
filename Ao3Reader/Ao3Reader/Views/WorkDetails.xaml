@@ -10,10 +10,15 @@
             x:Class="Ao3Reader.Views.WorkDetails"
             x:DataType="vm:DetailsPageVm">
     <ContentPage Title="Summary">
+        <ScrollView>
         <shimmer:ShimmerLayout Angle="-45" GradientSize=".5" IsLoading="{Binding FinishedLoad}">
             <StackLayout VerticalOptions="FillAndExpand">
                 <!-- <ActivityIndicator IsRunning="True" IsVisible="{Binding FinishedLoad}" /> -->
-                <StackLayout>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="500"/>
+                    </Grid.RowDefinitions>
                     <!-- Work Details -->
                     <Grid Margin="15, 20,15,50">
                         <Grid.ColumnDefinitions>
@@ -36,8 +41,6 @@
                             <RowDefinition Height="Auto" />
                             <!-- Separator -->
                             <RowDefinition Height="20" />
-                            <!-- Tags -->
-                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <!-- Title details -->
                         <Label Text="{Binding Work.Title}"
@@ -47,10 +50,19 @@
                                Style="{StaticResource TitleLabel}" />
                         <Label Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding Work.Author}"
                                Style="{StaticResource LightTitleLabel}" />
-                        <Button Visual="Material" Grid.Row="1" Grid.Column="1" Text="&#xf004;"
+                        <Button Visual="Material" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" Text="&#xf004;"
                                 Style="{StaticResource LikeButton}"
                                 Command="{Binding FavoriteCommand}"
-                                CommandParameter="{Binding Work}"/>
+                                CommandParameter="{Binding Work}">
+                            <Button.Triggers>
+                                <DataTrigger TargetType="Button" Binding="{Binding WorkFavorited}">
+                                    <DataTrigger.Value>
+                                        <x:Boolean>True</x:Boolean>
+                                    </DataTrigger.Value>
+                                    <Setter Property="Style" Value="{StaticResource LikedButton}" />
+                                </DataTrigger>
+                            </Button.Triggers>
+                        </Button>
                         <BoxView Style="{StaticResource Separator}"
                                  Grid.ColumnSpan="2"
                                  Grid.Row="2"
@@ -132,10 +144,10 @@
                         </Grid>
                     </Grid>
                     <!-- Tags -->
-                    <Grid Margin="0,0,0,10">
+                    <Grid Grid.Row="1" Margin="0,0,0,10">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <Label Grid.ColumnSpan="2" Text="Tags" Margin="15" Style="{StaticResource SubTitleLabel}" />
                         <CollectionView Grid.Row="1" Grid.ColumnSpan="2"
@@ -156,10 +168,10 @@
                             </CollectionView.ItemTemplate>
                         </CollectionView>
                     </Grid>
-                </StackLayout>
-
+                </Grid>
             </StackLayout>
         </shimmer:ShimmerLayout>
+            </ScrollView>
     </ContentPage>
     <ContentPage Title="Chapters">
         <StackLayout>

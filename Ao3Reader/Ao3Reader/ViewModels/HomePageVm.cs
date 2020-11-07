@@ -7,6 +7,9 @@ using System.Windows.Input;
 using Ao3Domain.Models.Data;
 using Xamarin.Forms;
 using Ao3Reader.Interfaces;
+using Ao3Reader.Views.Partials;
+using Rg.Plugins.Popup.Contracts;
+using Rg.Plugins.Popup.Services;
 using Xamarin.Essentials;
 
 namespace Ao3Reader.ViewModels
@@ -19,6 +22,7 @@ namespace Ao3Reader.ViewModels
         public ICommand RefreshFavorites { get; }
         public ICommand HistorySelected { get; }
         public ICommand SearchCommand { get; }
+        public ICommand HelpCommand { get; }
 
         public HomePageVm(INavigator navigator, IAlert alert, IWorksService worksService, ILocalStorage localStorage) :
             base(navigator, alert)
@@ -30,6 +34,7 @@ namespace Ao3Reader.ViewModels
             RefreshFavorites = new Command(async () => await ReloadFavorites());
             HistorySelected = new Command(async () => await ShowHistoryDetails());
             SearchCommand = new Command<string>(async (search) => await SearchHistories(search));
+            HelpCommand = new Command(async () => await ShowHelp());
         }
 
         #region Discover Props
@@ -58,8 +63,8 @@ namespace Ao3Reader.ViewModels
             try
             {
                 LoadingHistories = HasHistories = true;
-                await ManageDiscover();
                 await ManageFavorites();
+                await ManageDiscover();
             }
             catch (Exception e)
             {
@@ -175,6 +180,11 @@ namespace Ao3Reader.ViewModels
             {
                 await Alerts.CallAlertAsync(ex);
             }
+        }
+
+        private async Task ShowHelp()
+        {
+            await PopupNavigation.Instance.PushAsync(new InfoPanel());
         }
     }
 }

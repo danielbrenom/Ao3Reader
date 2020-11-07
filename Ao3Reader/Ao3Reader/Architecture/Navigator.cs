@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Ao3Reader.Interfaces;
 using Ao3Reader.Views;
+using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using NavigationPage = Xamarin.Forms.NavigationPage;
 
@@ -12,6 +14,11 @@ namespace Ao3Reader.Architecture
     {
         private static NavigationPage CurrentPage => Application.Current.MainPage as NavigationPage;
         private IAlert Alerts;
+
+        public Navigator(IAlert alert)
+        {
+            Alerts = alert;
+        }
 
         public void NavigateTo(bool hasNavigationBar = true)
         {
@@ -27,7 +34,7 @@ namespace Ao3Reader.Architecture
                     Application.Current.MainPage = hasNavBar ? new NavigationPage(page) : page;
                     await ((IBaseViewModel) page.BindingContext).HandleNavigation(parameters);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     await Alerts.CallAlertAsync("Error", "Not able to navigate to destination page", new AlertAction("OK"));
                 }
@@ -46,6 +53,18 @@ namespace Ao3Reader.Architecture
             {
                 await CurrentPage.Navigation.PopAsync();
                 await Alerts.CallAlertAsync("Error", "Not able to navigate to destination page", new AlertAction("OK"));
+            }
+        }
+
+        public async Task ReturnAsync()
+        {
+            if (PopupNavigation.Instance.PopupStack.Any())
+            {
+                await PopupNavigation.Instance.PopAsync();
+            }
+            else
+            {
+                await CurrentPage.Navigation.PopAsync();
             }
         }
 
