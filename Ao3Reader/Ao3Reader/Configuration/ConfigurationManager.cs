@@ -5,7 +5,7 @@ namespace Ao3Reader.Configuration
 {
     public class ConfigurationManager : IConfigurationManager
     {
-        private const string BaseUrl = "http://192.168.0.14:5000";
+        private const string BaseUrl = "http://192.168.0.18:7071/api";
         public string GetConfigKey(string key)
         {
             return key switch

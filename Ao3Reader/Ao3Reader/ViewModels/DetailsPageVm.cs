@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Ao3Domain.Models.Data;
@@ -15,36 +16,52 @@ namespace Ao3Reader.ViewModels
     {
         private readonly IWorksService _worksService;
         private readonly IFavoriteService _favoriteService;
+        private readonly IReadHistoryService _historyService;
         public ICommand SelectChapter { get; }
         public ICommand FavoriteCommand { get; }
 
         public DetailsPageVm(INavigator navigator, IAlert alert, IWorksService worksService,
-            IFavoriteService favoriteService) : base(navigator, alert)
+            IFavoriteService favoriteService, IReadHistoryService readHistoryService) : base(navigator, alert)
         {
             _worksService = worksService;
             _favoriteService = favoriteService;
+            _historyService = readHistoryService;
             SelectChapter = new Command(async () => await LoadChapter());
             FavoriteCommand = new Command<WorkIndexing>(async (work) => await FavoriteWork(work.getAs<Work>()));
         }
 
         public ChapterListing SelectedChapter { get; set; }
         public WorkIndexing Work { get; set; }
-        public ObservableCollection<ChapterListing> Chapters { get; set; } = new ObservableCollection<ChapterListing>();
+        public ObservableCollection<ChapterListingView> Chapters { get; set; } = new ObservableCollection<ChapterListingView>();
         public ObservableCollection<Tag> Tags { get; set; } = new ObservableCollection<Tag>();
         public bool FinishedLoad { get; set; } = true;
         public bool WorkFavorited { get; set; }
 
         public override async Task HandleNavigation(IReadOnlyDictionary<string, object> parameters = null)
         {
-            if (parameters is null)
-                return;
-            if (parameters.TryGetValue("work", out var work) && work is Work)
+            try
             {
-                var result = await _worksService.GetWork(((Work) work).WorkId);
-                Work = work.getAs<WorkIndexing>();
-                Work.Tags.ForEach(tag => Tags.Add(new Tag {Name = tag}));
-                result.Chapters.ForEach(Chapters.Add);
-                WorkFavorited = await _favoriteService.CheckFavorites(work.getAs<Work>());
+                if (parameters is null)
+                    return;
+                if (parameters.TryGetValue("work", out var work) && work is Work)
+                {
+                    var result = await _worksService.GetWork(((Work) work).WorkId);
+                    if (!await _historyService.CheckHistory(result.WorkId))
+                        await _historyService.InitializeHistory(result);
+                    var history = await _historyService.GetWorkHistory(result.WorkId);
+                    Work = work.getAs<WorkIndexing>();
+                    Work.Tags.ForEach(tag => Tags.Add(new Tag {Name = tag}));
+                    result.Chapters.ForEach(chapter =>
+                    {
+                        var ch = chapter.getAs<ChapterListingView>();
+                        ch.ChapterRead = history.ChapterRead[ch.Id];
+                        Chapters.Add(ch);
+                    });
+                    WorkFavorited = await _favoriteService.CheckFavorites(work.getAs<Work>());
+                }
+            }
+            finally
+            {
                 FinishedLoad = false;
             }
         }
@@ -56,6 +73,8 @@ namespace Ao3Reader.ViewModels
             try
             {
                 var chapter = SelectedChapter;
+                Chapters.First(ch => ch.Id == chapter.Id).ChapterRead = true;
+                //await _historyService.MarkChapter(Work.WorkId, SelectedChapter.Id);
                 await Navigator.NavigateToAsync("ChapterReading",
                     new Dictionary<string, object> {{"chapter", chapter}, {"work", Work}});
             }

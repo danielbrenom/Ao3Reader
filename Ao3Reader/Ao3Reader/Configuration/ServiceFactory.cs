@@ -34,8 +34,9 @@ namespace Ao3Reader.Configuration
         private static void InjectServices(IServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<IHttpService, HttpService>();
-            serviceCollection.AddTransient<IWorksService, WorksService>();
-            serviceCollection.AddTransient<IFavoriteService, FavoriteService>();
+            serviceCollection.AddSingleton<IWorksService, WorksService>();
+            serviceCollection.AddSingleton<IFavoriteService, FavoriteService>();
+            serviceCollection.AddSingleton<IReadHistoryService, ReadHistoryService>();
         }
 
         private static void InjectMockServices(IServiceCollection serviceCollection){}
