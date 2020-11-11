@@ -66,9 +66,9 @@ namespace Ao3Reader.Architecture
         public string Text { get; }
         public Action ActionButton { get; }
 
-        public AlertAction(string textoBotao)
+        public AlertAction(string texto)
         {
-            Text = textoBotao;
+            Text = texto;
         }
 
         public AlertAction(string text, Action action) : this(text)
